@@ -33,19 +33,21 @@
             let linkCompose = document.getElementById('linkCompose');
 
             // Clicking the "Inbox" link will display the games that haven't been deleted
-            linkTrash.addEventListener('click', function(e) {
-                e.preventDefault();
-                let filtered = games.filter( game => game.deleted);
-                selectedGame = 0;
-                render(filtered);
-            });
-        
-            // Clicking the "Trash" link will display the games that have been deleted
             linkInbox.addEventListener('click', function(e) {
                 e.preventDefault();
                 let mainInbox = games.filter( game => !game.deleted);
                 selectedGame = 0;
                 render(mainInbox); 
+                console.log('Now displaying all games.')
+            });
+        
+            // Clicking the "Trash" link will display the games that have been deleted
+            linkTrash.addEventListener('click', function(e) {
+                e.preventDefault();
+                let filtered = games.filter( game => game.deleted);
+                selectedGame = 0;
+                render(filtered);
+                console.log('Now displaying all games that have been deleted.')
             });
 
             // The InnerHTML for the form to create a new game object
@@ -105,6 +107,7 @@
 
                     // Puts the newly created object at the top of the array list and refreshes the list displayed
                     games.unshift(obj_newgame);
+                    console.table(games);
                     setLocalStorage();
                     linkInbox.click();
                 });
@@ -166,9 +169,7 @@
             </div>
 
             <div class="email-content-controls pure-u-1-2">
-                <button class="secondary-button pure-button">Reply</button>
-                <button class="secondary-button pure-button">Forward</button>
-                <button id="delete" class="secondary-button pure-button" data-id="${idx}">${games[idx].deleted == true ? 'Deleted' : 'Delete'}</button>
+                <button id="delete" class="secondary-button pure-button" data-id="${idx}">${games[idx].deleted == true ? 'Restore' : 'Delete'}</button>
             </div>
         </div>
 
@@ -198,11 +199,13 @@
             let mainInbox = games.filter( game => !game.deleted);
             selectedGame = 0;
             render(mainInbox); 
+            console.log('Game has been successfully deleted.');
         } else {
             delete games[index].deleted;
             let filtered = games.filter( game => game.deleted);
             selectedGame = 0;
             render(filtered);
+            console.log('Game has been successfully restored.');
         }
         
     }
